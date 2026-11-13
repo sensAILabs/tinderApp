@@ -1,0 +1,13 @@
+{
+  "port": 8765,
+  "open_browser": true,
+  "image_roots": [
+    "images",
+    "../EV training dataset"
+  ],
+  "class_folders": ["ev", "ice"],
+  "swipe": {
+    "left": "ice",
+    "right": "ev"
+  }
+}

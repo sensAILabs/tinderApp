@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+  <title>Vehicle Tinder — EV / ICE</title>
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    /* Tiny fallback so a missing server is obvious even before CSS loads. */
+    #server-warning {
+      display: none;
+      max-width: 520px;
+      margin: 24px auto;
+      padding: 16px 18px;
+      border: 2px solid #c45c26;
+      border-radius: 12px;
+      background: #fff4ec;
+      color: #3b1d0d;
+      font: 15px/1.45 -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+    #server-warning strong { display: block; margin-bottom: 6px; font-size: 16px; }
+  </style>
+</head>
+<body>
+  <div id="server-warning">
+    <strong>App was opened the wrong way</strong>
+    Do not open this HTML file directly. Double-click
+    <code>Start Vehicle Tinder.command</code> (Mac) or
+    <code>Start Vehicle Tinder.bat</code> (Windows) instead, then use the browser
+    window that opens at <code>http://127.0.0.1:8765</code>.
+  </div>
+  <div id="start-screen" class="screen">
+    <div class="card start-card">
+      <p class="eyebrow">Vehicle Tinder</p>
+      <h1>Label vehicles</h1>
+      <p class="lede">
+        Swipe each photo <strong>right for EV</strong> (electric) or
+        <strong>left for ICE</strong> (gas / diesel).
+      </p>
+
+      <label class="field">
+        <span>Your name (saved with each label)</span>
+        <input id="annotator-input" type="text" placeholder="e.g. Alex" autocomplete="name" />
+      </label>
+
+      <div class="hint-grid">
+        <div class="hint ice">
+          <span class="hint-arrow">←</span>
+          <span>ICE</span>
+        </div>
+        <div class="hint ev">
+          <span>EV</span>
+          <span class="hint-arrow">→</span>
+        </div>
+      </div>
+
+      <button id="start-btn" class="btn primary" type="button">Start labeling</button>
+      <p id="start-status" class="status-line"></p>
+    </div>
+  </div>
+
+  <div id="app-screen" class="screen hidden">
+    <header class="topbar">
+      <div>
+        <p class="eyebrow">Vehicle Tinder</p>
+        <p id="annotator-label" class="annotator-label"></p>
+      </div>
+      <div class="progress-block">
+        <div class="progress-meta">
+          <span id="progress-text">0 / 0</span>
+          <span id="progress-counts"></span>
+        </div>
+        <div class="progress-track">
+          <div id="progress-fill" class="progress-fill"></div>
+        </div>
+      </div>
+    </header>
+
+    <main class="stage">
+      <div class="side-label left">ICE ←</div>
+      <div class="deck" id="deck">
+        <div id="empty-state" class="empty-state hidden">
+          <h2>All done</h2>
+          <p>Every image has a label. Download the CSV and send it back.</p>
+          <a class="btn primary" href="/api/export.csv">Download annotations.csv</a>
+        </div>
+        <article id="card" class="swipe-card hidden">
+          <div class="stamp stamp-ev">EV</div>
+          <div class="stamp stamp-ice">ICE</div>
+          <img id="card-image" alt="Vehicle to label" draggable="false" />
+          <div class="card-footer">
+            <span id="card-name"></span>
+            <span id="card-source"></span>
+          </div>
+        </article>
+      </div>
+      <div class="side-label right">→ EV</div>
+    </main>
+
+    <footer class="controls">
+      <button id="btn-ice" class="btn ice" type="button" title="Mark as ICE (←)">ICE</button>
+      <button id="btn-undo" class="btn ghost" type="button" title="Undo last label">Undo</button>
+      <button id="btn-skip" class="btn ghost" type="button" title="Skip unclear image">Skip</button>
+      <button id="btn-ev" class="btn ev" type="button" title="Mark as EV (→)">EV</button>
+    </footer>
+
+    <p class="keyboard-help">
+      Keyboard: <kbd>←</kbd> ICE · <kbd>→</kbd> EV · <kbd>↑</kbd> Skip · <kbd>Z</kbd> Undo
+    </p>
+    <p class="export-help">
+      Labels auto-save to <code>output/annotations.csv</code>.
+      <a href="/api/export.csv">Download CSV</a>
+    </p>
+  </div>
+
+  <script>
+    if (location.protocol === "file:") {
+      document.getElementById("server-warning").style.display = "block";
+      document.getElementById("start-screen").style.display = "none";
+      document.getElementById("app-screen").style.display = "none";
+    }
+  </script>
+  <script src="app.js"></script>
+</body>
+</html>
